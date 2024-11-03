@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('message_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('message_id')->constrained()->onDelete('cascade'); // メッセージへの外部キー
-            $table->foreignId('uploaded_by')->constrained('users')->onDelete('cascade'); // ファイルのアップロード者
-            $table->string('file_url'); // ファイルの保存URL
+            $table->foreignId('message_id')->constrained()->onDelete('cascade');
+            $table->foreignId('uploaded_by')->constrained('users')->onDelete('cascade'); 
+            $table->string('file_url');
             $table->timestamps();
         });
     }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Comment;
 
 class CommentSeeder extends Seeder
 {
@@ -12,6 +13,10 @@ class CommentSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Comment::create([
+            'id'         => 'Sample Event',
+            'start_time'    => '2023-11-14 07:00:00',
+
+        ]);
     }
 }
