@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->boolean('all_day')->default(false);
+            $table->string('color')->nullable();
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
+            $table->foreignId('organizer_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

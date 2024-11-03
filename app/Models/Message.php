@@ -32,4 +32,11 @@ class Message extends Model
     {
         return $this->hasMany(MessageFile::class);
     }
+
+    // 送信者とのリレーション
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
 }
+

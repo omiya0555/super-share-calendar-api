@@ -21,7 +21,44 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_icon_id',
     ];
+
+    // イベントリレーション
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'organizer_id');
+    }
+
+    // コメントリレーション
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    // 通知リレーション
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    // 参加者リレーション
+    public function participatingEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_participants')->withTimestamps()->withPivot('status', 'viewed');
+    }
+
+    // チャットルームリレーション
+    public function chatRooms()
+    {
+        return $this->belongsToMany(ChatRoom::class, 'chat_room_users')->withTimestamps();
+    }
+    
+    // アイコンリレーション
+    public function icon()
+    {
+        return $this->belongsTo(UserIcon::class, 'user_icon_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

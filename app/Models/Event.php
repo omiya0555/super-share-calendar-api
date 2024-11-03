@@ -27,6 +27,6 @@ class Event extends Model
     // pivot プロパティを通じて event_participant にアクセス
     public function participants()
     {
-        return $this->belongsToMany(User::class, 'event_participant')->withTimestamps()->withPivot('status', 'viewed');
+        return $this->belongsToMany(User::class, 'event_participants')->withTimestamps()->withPivot('status', 'viewed');
     }
 }

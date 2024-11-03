@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('chat_rooms', function (Blueprint $table) {
             $table->id();
+            $table->string('room_name')->nullable(); // ルーム名（個人チャットの場合はNULLでも可）
+            $table->boolean('is_group')->default(false); // グループチャットフラグ
             $table->timestamps();
         });
     }

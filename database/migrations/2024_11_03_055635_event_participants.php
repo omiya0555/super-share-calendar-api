@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comment_files', function (Blueprint $table) {
+        Schema::create('event_participants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('comment_id')->constrained()->onDelete('cascade');
-            $table->foreignId('uploaded_by')->constrained('users')->onDelete('cascade');
-            $table->string('file_url'); 
+            $table->foreignId('event_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('status')->default(true);
+            $table->boolean('viewed')->default(false);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comment_files');
+        Schema::dropIfExists('event_participants');
     }
 };
