@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
-use App\Http\Controllers\Controller;
 
 
 class AuthController extends Controller
@@ -22,11 +22,6 @@ class AuthController extends Controller
 
         // 認証チェック
         if (Auth::attempt($validated)) {
-            
-            throw ValidationException::withMessages([
-                'email' => ['誤ったクレデンシャル情報です。'],
-            ]);
-
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -37,7 +32,10 @@ class AuthController extends Controller
             ], 200);
         }
 
-        return response()->json(['message' => '認証に失敗しました'], 401);
+        // 認証失敗時のエラーメッセージ
+        throw ValidationException::withMessages([
+            'email' => ['誤ったクレデンシャル情報です。'],
+        ]);
     }
 
     // ログアウト処理
