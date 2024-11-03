@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\ChatRoomController;
+use App\Http\Controllers\Api\MessageController;
 
 Route::post('/login', [AuthController::class, 'login']);                        // ログイン処理-トークン発行
 
@@ -34,16 +36,32 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{eventId}/participants',  [EventController::class, 'addParticipant']);
         Route::delete('/{eventId}/participants',[EventController::class, 'removeParticipant']);
         Route::patch('/{eventId}/participants/{userId}', [EventController::class, 'updateParticipantStatus']);
-    });
 
-    // CommentController: コメント関連ルート
-    Route::prefix('events/{eventId}/comments')->group(function () {
-        Route::get('/', [CommentController::class, 'index']);                   // コメント一覧取得
-        Route::post('/', [CommentController::class, 'store']);                  // コメント作成
-        Route::put('/{commentId}', [CommentController::class, 'update']);              // コメント更新
-        Route::delete('/{commentId}', [CommentController::class, 'destroy']);          // コメント削除
-        Route::post('/{commentId}/files', [CommentController::class, 'attachFile']);   // コメントへのファイル添付
+            // CommentController: コメント関連ルート
+            Route::prefix('{eventId}/comments')->group(function () {
+                Route::get('/', [CommentController::class, 'index']);                           // コメント一覧取得
+                Route::post('/', [CommentController::class, 'store']);                          // コメント作成
+                Route::put('/{commentId}', [CommentController::class, 'update']);               // コメント更新
+                Route::delete('/{commentId}', [CommentController::class, 'destroy']);           // コメント削除
+                Route::post('/{commentId}/files', [CommentController::class, 'attachFile']);    // コメントへのファイル添付
+            });
     });
-
+    
+    // ChatRoomController: チャットルーム関連のルート
+    Route::prefix('chat-rooms')->group(function () {
+        Route::get('/', [ChatRoomController::class, 'index']);                              // チャットルーム一覧
+        Route::post('/', [ChatRoomController::class, 'store']);                             // チャットルーム作成
+        Route::post('/{chatRoomId}/users', [ChatRoomController::class, 'addUser']);         // ユーザー追加
+        Route::post('/get-or-create', [ChatRoomController::class, 'getOrCreateChatRoom']);  // 個人チャットルームの取得または作成
+        Route::delete('/{chatRoomId}', [ChatRoomController::class, 'destroy']);             // チャットルーム削除
+    
+        // MessageController: メッセージ関連のルート
+        Route::prefix('{chatRoomId}/messages')->group(function () {
+            Route::get('/', [MessageController::class, 'index']);                           // メッセージ一覧
+            Route::post('/', [MessageController::class, 'store']);                          // メッセージ作成
+            Route::delete('/{messageId}', [MessageController::class, 'destroy']);           // メッセージ削除
+            Route::post('/{messageId}/files', [MessageController::class, 'attachFile']);    // メッセージへのファイル添付
+        });
+    });
 });
 
