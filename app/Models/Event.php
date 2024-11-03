@@ -9,7 +9,7 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'start_time', 'end_time', 'organizer_id'];
+    protected $fillable = ['title', 'all_day', "color", 'start_time', 'end_time', 'organizer_id'];
 
     // ユーザーリレーション
     public function organizer()
