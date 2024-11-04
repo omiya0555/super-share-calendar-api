@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ChatRoomController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\NotificationController;
 
 Route::post('/login', [AuthController::class, 'login']);                        // ログイン処理-トークン発行
 
@@ -63,5 +64,13 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/{messageId}/files', [MessageController::class, 'attachFile']);    // メッセージへのファイル添付
         });
     });
+
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index']);                   // 通知一覧の取得
+        Route::get('/{id}', [NotificationController::class, 'show']);                // 通知の詳細表示
+        Route::post('/', [NotificationController::class, 'store']);                  // 通知の作成
+        Route::put('/{id}/read', [NotificationController::class, 'markAsRead']);     // 通知の既読処理
+    });
+    
 });
 
