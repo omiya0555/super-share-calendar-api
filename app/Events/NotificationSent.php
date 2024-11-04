@@ -27,9 +27,10 @@ class NotificationSent implements ShouldBroadcast
         if ($this->notification->type === 'individual') {
             return new PrivateChannel('user.' . $this->notification->user_id);
 
-        } elseif ($this->notification->type === 'group') {
-            return new PrivateChannel('group-chat.' . $this->notification->group_id);
-            
+        } elseif ($this->notification->type === 'group' && $this->notification->chat_room_id) {
+            // chat_room_id を用いてグループを特定し、チャネルを設定
+            return new PrivateChannel('group-chat.' . $this->notification->chat_room_id);
+
         } else {
             return new Channel('public-channel');
         }

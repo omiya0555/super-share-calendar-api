@@ -38,20 +38,22 @@ class NotificationController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id'     => 'required|exists:users,id',
-            'title'       => 'required|string|max:255',
-            'content'     => 'required|string',
-            'type'        => 'required|string|in:group,individual,global',
+            'user_id'       => 'required|exists:users,id',
+            'title'         => 'required|string|max:255',
+            'content'       => 'required|string',
+            'type'          => 'required|string|in:group,individual,global',
+            'chat_room_id'  => 'required_if:type,group|exists:chat_rooms,id', 
         ]);
 
         try {
             DB::beginTransaction();
 
             $notification = Notification::create([
-                'user_id' => $data['user_id'],
-                'title'   => $data['title'],
-                'content' => $data['content'],
-                'type'    => $data['type'],         // type で グループ、個人、全体を判別
+                'user_id'       => $data['user_id'],
+                'title'         => $data['title'],
+                'content'       => $data['content'],
+                'type'          => $data['type'], // type で グループ、個人、全体を判別
+                'chat_room_id'  => $data['chat_room_id'] ?? null,
             ]);
 
             // イベント発火 typeごとに異なるチャネルを利用
