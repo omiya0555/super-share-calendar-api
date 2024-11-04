@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\ChatRoom;
 use App\Models\EventParticipant;
 
 class EventController extends Controller
@@ -51,15 +52,30 @@ class EventController extends Controller
         try {
             $event = Event::create($data);
 
+            // syncParticipantsメソッドを用いて参加者を追加
             if (!empty($data['participants'])) {
                 $this->syncParticipants($event, $data['participants']);
             }
 
+            // イベント専用のグループチャットルームを作成
+            $chatRoom = ChatRoom::create([
+                'room_name' => $event->title . '-Group', // 末尾にグループを表す文字を追加
+                'is_group'  => true,
+            ]);
+
+            // 参加者全員をチャットルームに追加
+            foreach ($event->participants as $participant) {
+                $chatRoom->users()->attach($participant->id);
+            }
+
+            // イベント情報に作成したグループチャットルームのIDを追加
+            $event->update(['chat_room_id' => $chatRoom->id]);
+
             DB::commit();
-            return response()->json(['message' => 'イベント作成成功', 'event' => $event], 201);
+            return response()->json(['message' => 'イベント・チャットルーム作成に成功しました。', 'event' => $event], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'イベント作成失敗', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'イベント・チャットルーム作成に失敗しました。', 'error' => $e->getMessage()], 500);
         }
     }
 

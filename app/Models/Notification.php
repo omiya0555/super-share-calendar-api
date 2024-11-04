@@ -14,7 +14,8 @@ class Notification extends Model
         'title',
         'content',
         'type',
-        'read_at'
+        'read_at',
+        'chat_room_id'
     ];
 
     protected $casts = [

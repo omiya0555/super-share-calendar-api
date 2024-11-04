@@ -50,6 +50,9 @@ class MessageController extends Controller
             'sender_id'    => $data['sender_id'],
             'content'      => $data['content'],
         ]);
+
+        // メッセージ送信イベントを発火
+        event(new MessageSent($message));
     
         return response()->json($message, 201);
     }

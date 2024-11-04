@@ -37,6 +37,7 @@ class NotificationController extends Controller
     // 通知の作成
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'user_id'       => 'required|exists:users,id',
             'title'         => 'required|string|max:255',
@@ -53,7 +54,7 @@ class NotificationController extends Controller
                 'title'         => $data['title'],
                 'content'       => $data['content'],
                 'type'          => $data['type'], // type で グループ、個人、全体を判別
-                'chat_room_id'  => $data['chat_room_id'] ?? null,
+                'chat_room_id'  => $data['chat_room_id'],
             ]);
 
             // イベント発火 typeごとに異なるチャネルを利用
