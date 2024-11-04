@@ -8,6 +8,7 @@ use App\Models\Message;
 use App\Models\ChatRoom;
 use App\Models\MessageFile;
 use Illuminate\Support\Facades\Storage;
+use App\Events\MessageSent;
 
 class MessageController extends Controller
 {

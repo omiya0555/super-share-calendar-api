@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ChatRoomController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\WeatherController;
 
 Route::post('/login', [AuthController::class, 'login']);                        // ログイン処理-トークン発行
 
@@ -65,12 +66,15 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
+    // NotificationController: 通知関連のルート
     Route::prefix('notifications')->group(function () {
         Route::get('/', [NotificationController::class, 'index']);                   // 通知一覧の取得
         Route::get('/{id}', [NotificationController::class, 'show']);                // 通知の詳細表示
         Route::post('/', [NotificationController::class, 'store']);                  // 通知の作成
         Route::put('/{id}/read', [NotificationController::class, 'markAsRead']);     // 通知の既読処理
     });
-    
+
+    // 天気関連のルート
+    Route::get('/weather/tokyo', [WeatherController::class, 'getTokyoWeather']);     // 天気情報の取得
 });
 
