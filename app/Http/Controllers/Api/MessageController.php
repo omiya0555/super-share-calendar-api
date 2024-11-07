@@ -36,11 +36,10 @@ class MessageController extends Controller
     
         $data = $request->validate([
             'content'   => 'required|string',
-            'sender_id' => 'required|exists:users,id',
         ]);
     
         // sender_id がチャットルームに所属しているかチェック
-        $isMember = $chatRoom->users->contains('id', $data['sender_id']);
+        $isMember = $chatRoom->users->contains('id', $request->user()->id);
         if (!$isMember) {
             return response()->json(['message' => 'このユーザーはチャットルームに所属していません'], 403);
         }
@@ -48,7 +47,7 @@ class MessageController extends Controller
         // メッセージ作成
         $message = Message::create([
             'chat_room_id' => $chatRoomId,
-            'sender_id'    => $data['sender_id'],
+            'sender_id'    => $request->user()->id,
             'content'      => $data['content'],
         ]);
 
