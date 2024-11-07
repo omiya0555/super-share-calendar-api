@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Broadcast;
 
 // 個人チャットチャネル
 Broadcast::channel('chat-room.{chatRoomId}', function ($user, $chatRoomId) {
-    return $user->chatRooms()->where('chat_room_id', $chatRoomId)->exists();
+    return true;
+    //return $user->chatRooms()->where('chat_room_id', $chatRoomId)->exists();
 });
 
 // グループチャットチャネル

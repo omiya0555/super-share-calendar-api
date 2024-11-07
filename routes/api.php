@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Api\WeatherController;
 
 Route::post('/login', [AuthController::class, 'login']);                        // ログイン処理-トークン発行
 
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 // 認証が必要なルート群
 Route::middleware('auth:sanctum')->group(function () {
